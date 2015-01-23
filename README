@@ -1,0 +1,8 @@
+twgrabber - bot that grabs tweets from Twitter stream
+
+Installation
+------------
+twgrabber depends on:
+	- tweepy (http://www.tweepy.org)
+
+Install the dependency using pip
