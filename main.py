@@ -57,7 +57,7 @@ def load_credentials(filename = "credentials.txt"):
 			oauth_varname, oauth_val = line.split('=')
 
 			# check for valid variables
-			if oauth_varname != "consumer_key" and oauth_varname != "consumer_secret" and oauth_varname != "access_token" and oauth_varname != "access_token_secret":
+			if oauth_varname not in ["consumer_key", "consumer_secret", "access_token", "access_token_secret"]:
 				print_credentials_help()
 				sys.exit(1)
 
@@ -112,15 +112,15 @@ if __name__ == "__main__":
 	# parse options
 	credentialFile = "credentials.txt"
 	for option, argument in options:
-		if option == "-c" or option == "--credentials":
+		if option in ["-c", "--credentials"]:
 			credentialFile = argument
-		elif option == "-f" or option == "--credentials-format":
+		elif option in ["-f", "--credentials-format"]:
 			print_credentials_help()
 			sys.exit(0)
-		elif option == "-h" or option == "--help":
+		elif option in ["-h", "--help"]:
 			usage()
 			sys.exit(0)
-		elif option == "-v" or option == "--version":
+		elif option in ["-v", "--version"]:
 			print_version()
 			sys.exit(0)
 	
