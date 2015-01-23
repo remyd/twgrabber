@@ -55,6 +55,12 @@ def load_credentials(filename = "credentials.txt"):
 	with open(filename) as credentials_file:
 		for line in credentials_file:
 			oauth_varname, oauth_val = line.split('=')
+
+			# check for valid variables
+			if oauth_varname != "consumer_key" and oauth_varname != "consumer_secret" and oauth_varname != "access_token" and oauth_varname != "access_token_secret":
+				print_credentials_help()
+				sys.exit(1)
+
 			oauthInfos[oauth_varname.strip()] = oauth_val.strip()
 	
 	return oauthInfos
@@ -66,6 +72,7 @@ def usage():
 
 	print "usage: twgrabber [-h] <keywords> <file>"
 	print "\t-c | --credentials <file>	file containing the credentials to use for the authentication on the Twitter API. Default is credentials.txt"
+	print "\t-f | --credentials-format	print the documentation of the format of the credentials file"
 	print "\t-h | --help				print this help message and exit"
 	print "\t<keywords>					list of keywords to filter separated by a comma"
 	print "\t<file>						file where data will be written"
@@ -77,10 +84,26 @@ def print_version():
 	
 	print "twgrabber 0.1"
 
+def print_credentials_help():
+	"""
+	Print the documentation of the format of the credentials file
+	"""
+
+	print "twgrabber: format of the credentials file"
+	print ""
+	print "The credentials file must contain 4 variables, one variable per line:"
+	print "	consumer_key			Twitter API key"
+	print "	consumer_secret			Twitter API secret"
+	print "	access_token 			Public key to make API requests"
+	print "	access_token_secret		Private key to make API requests"
+	print "The general format of the lines is <variable> = <value>."
+	print ""
+	print "Check the Twitter documentation for more information on how to obtain these keys."
+
 if __name__ == "__main__":
 	# parse command line
 	try:
-		options, arguments = getopt.getopt(sys.argv[1:], "c:hv", ["credentials=", "help", "version"])
+		options, arguments = getopt.getopt(sys.argv[1:], "c:fhv", ["credentials=", "credentials-format", "help", "version"])
 	except getopt.GetoptError as error:
 		print error
 		usage()
@@ -91,7 +114,9 @@ if __name__ == "__main__":
 	for option, argument in options:
 		if option == "-c" or option == "--credentials":
 			credentialFile = argument
-			print credentialFile
+		elif option == "-f" or option == "--credentials-format":
+			print_credentials_help()
+			sys.exit(0)
 		elif option == "-h" or option == "--help":
 			usage()
 			sys.exit(0)
