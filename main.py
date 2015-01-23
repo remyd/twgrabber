@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Tweets grabber
+"""
+
 import getopt
 import sys
 
@@ -38,9 +42,20 @@ class TwitterStreamListener(StreamListener):
 		Handler when an error occurred
 		
 		:param statusCode
+		:return False to kill the stream
 		"""
 
-		print statusCode
+		print "Error: " + statusCode
+		return
+
+	def on_timeout(self):
+		"""
+		Handler when the connection has timed out
+
+		:return True to keep streaming
+		"""
+		return True
+
 
 def load_credentials(filename = "credentials.txt"):
 	"""
@@ -55,13 +70,16 @@ def load_credentials(filename = "credentials.txt"):
 	with open(filename) as credentials_file:
 		for line in credentials_file:
 			oauth_varname, oauth_val = line.split('=')
+			oauth_varname = oauth_varname.strip()
+			oauth_val = oauth_val.strip()
 
 			# check for valid variables
 			if oauth_varname not in ["consumer_key", "consumer_secret", "access_token", "access_token_secret"]:
+				print "Error: " + oauth_varname + " not reconized."
 				print_credentials_help()
 				sys.exit(1)
 
-			oauthInfos[oauth_varname.strip()] = oauth_val.strip()
+			oauthInfos[oauth_varname] = oauth_val
 	
 	return oauthInfos
 
