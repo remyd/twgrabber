@@ -6,11 +6,15 @@ Tweets grabber
 """
 
 import getopt
+import signal
 import sys
 
 from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import Stream
+
+# Twitter stream
+stream = None
 
 class TwitterStreamListener(StreamListener):
 	"""
@@ -56,6 +60,17 @@ class TwitterStreamListener(StreamListener):
 		"""
 		return True
 
+def sigint_handler(signum, frame):
+	"""
+	Signal handler for SIGINT (the user has pressed on CTRL+C)
+	Disconnect the stream and exit
+
+	:param signum Signal number
+	:param frame Current stack frame
+	"""
+
+	stream.disconnect()
+	sys.exit(0)
 
 def load_credentials(filename = "credentials.txt"):
 	"""
@@ -156,6 +171,9 @@ if __name__ == "__main__":
 	# initialize the authentication
 	auth = OAuthHandler(oauthInfos['consumer_key'], oauthInfos['consumer_secret'])
 	auth.set_access_token(oauthInfos['access_token'], oauthInfos['access_token_secret'])
+
+	# set the handler for SIGINT
+	signal.signal(signal.SIGINT, sigint_handler)
 	
 	# initialize the stream and start grabbing tweets
 	stream = Stream(auth, TwitterStreamListener(outputFilename))
