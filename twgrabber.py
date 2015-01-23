@@ -104,11 +104,11 @@ def usage():
 	"""
 
 	print "usage: twgrabber [-h] <keywords> <file>"
-	print "\t-c | --credentials <file>	file containing the credentials to use for the authentication on the Twitter API. Default is credentials.txt"
-	print "\t-f | --credentials-format	print the documentation of the format of the credentials file"
-	print "\t-h | --help				print this help message and exit"
-	print "\t<keywords>					list of keywords to filter separated by a comma"
-	print "\t<file>						file where data will be written"
+	print "	-c, --credentials <file>	file containing the credentials to use for the authentication on the Twitter API. Default is credentials.txt"
+	print "	-f, --credentials-format	print the documentation of the format of the credentials file"
+	print "	-h, --help			print this help message and exit"
+	print "	<keywords>			list of keywords to filter separated by a comma"
+	print "	<file>				file where data will be written"
 
 def print_version():
 	"""
